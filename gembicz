@@ -1,0 +1,138 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+class Program
+{
+    delegate double Operation(double a, double b);
+    delegate void Show();
+
+    static List<string> history = new List<string>();
+    static List<double> wyniki = new List<double>();
+
+    static double Add(double a, double b) => a + b;
+    static double Subtract(double a, double b) => a - b;
+    static double Multiply(double a, double b) => a * b;
+    static double Devide(double a, double b) => a / b;
+
+    static void Main()
+    {
+        bool program = true;
+
+        while (program)
+        {
+            Console.WriteLine("\n1.Dodawanie");
+            Console.WriteLine("2.Odejmowanie");
+            Console.WriteLine("3.Mnożenie");
+            Console.WriteLine("4.Dzielenie");
+            Console.WriteLine("5.Historia");
+            Console.WriteLine("6.Statystki");
+            Console.WriteLine("7.Wyczyść");
+            Console.WriteLine("8.Koniec\n");
+            Console.WriteLine("Option: ");
+
+            string Option = Console.ReadLine();
+
+            switch (Option)
+            {
+                case "1":
+                    Operation d1 = Add;
+                    Calc(d1, "+");
+                    break;
+
+                case "2":
+                    Operation d2 = Subtract;
+                    Calc(d2, "-");
+                    break;
+
+                case "3":
+                    Operation d3 = Multiply;
+                    Calc(d3, "*");
+                    break;
+
+                case "4":
+                    Operation d4 = Devide;
+                    Calc(d4, "/");
+                    break;
+
+                case "5":
+                    Show p1 = ShowHistory;
+                    p1();
+                    break;
+
+                case "6":
+                    Show p2 = Stats;
+                    p2();
+                    break;
+
+                case "7":
+                    Show p3 = Clear;
+                    p3();
+                    break;
+
+                case "8":
+                    program = false;
+                    break;
+            }
+        }
+    }
+
+    static void Calc(Operation Operation, string operation)
+    {
+        Console.WriteLine("Liczba a: ");
+        double a = Convert.ToDouble(Console.ReadLine());
+        Console.WriteLine("Liczba b: ");
+        double b = Convert.ToDouble(Console.ReadLine());
+
+        if (operation == "/" && b == 0)
+        {
+            Console.WriteLine("Blad");
+            return;
+        }
+
+        double result = Operation(a, b);
+
+        Console.WriteLine("Wynik: " + result);
+
+        history.Add(a + " " + operation + " " + b + " = " + result);
+        wyniki.Add(result);
+    }
+
+    static void ShowHistory()
+    {
+        if (history.Count == 0)
+        {
+            Console.WriteLine("Historia pusta");
+            return;
+        }
+
+        foreach (string h in history)
+        {
+            Console.WriteLine(h);
+        }
+    }
+
+    static void Stats()
+    {
+        if (wyniki.Count == 0)
+        {
+            Console.WriteLine("Statystyki puste");
+            return;
+        }
+
+        Console.WriteLine("Suma: " + wyniki.Sum());
+        Console.WriteLine("Średnia: " + wyniki.Average());
+        Console.WriteLine("Miniumum: " + wyniki.Min());
+        Console.WriteLine("Maximum: " + wyniki.Max());
+    }
+
+    static void Clear()
+    {
+        history.Clear();
+        wyniki.Clear();
+
+        Console.WriteLine("Wyczyszczono");
+    }
+}
+
+
